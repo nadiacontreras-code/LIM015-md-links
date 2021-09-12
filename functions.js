@@ -1,5 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+/* import { existsSync, readdirSync, statSync, readFileSync } from 'fs';
+import { isAbsolute, resolve, extname } from 'path'; */
+ const fs = require('fs');
+ const path = require('path');
 
 //----****----****--- LEYENDO CONTENIDO COMO ARHCIVO-****----**---** //
 const pathTest = process.argv[2];
@@ -45,7 +47,7 @@ const listOfFiles = (pathPrueba) => {
             const pathPrueba2 = path.resolve(`${pathPrueba}/${file}`)
             return listOfFiles(pathPrueba2)
         }else{
-            
+           
             return pathIsAbsolute(path.resolve(`${pathPrueba}/${file}`));
         }
     })
@@ -116,8 +118,8 @@ const getLinks = (filePath) => {
 return links;
 }
 
-/* console.log(getLinks(pathTest));
-  getLinks(pathTest) */
+console.log(getLinks(pathTest));
+  getLinks(pathTest)
 
 
 
@@ -126,7 +128,7 @@ return links;
 text: " Texto que aparecía dentro del link ",
 file:"Ruta del archivo donde se encontró el link "}*/
 
-module.exports ={
+module.exports={
     pathExistFun,
     pathIsAbsolute,
     pathResolveAbsolute,

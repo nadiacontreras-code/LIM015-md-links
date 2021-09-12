@@ -1,4 +1,4 @@
-
+/*const mdLinks = require('../prueba/mdLinks'); */
 /*function readfile (path, response) {
   fs.readFile(path, function (error,data){
   if (error){
@@ -11,11 +11,15 @@ response.end();
 });
 }*/
 
-module.exports =  {
+/* module.exports =  {
  
  };
+ */
+ //import fetch from "node-fetch";
+/*  const fs = require('fs');
+ const path = require('path'); 
 
-
+ const { getStatus } = require('./mdLinks.js') */
 
 
 
