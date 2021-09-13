@@ -110,7 +110,7 @@ const getLinks = (filePath) => {
         const singleMatch = /\[([^\[]+)\]\((.*)\)/;
         for (let i = 0; i < matches.length; i++) {
         let text = singleMatch.exec(matches[i]);
-        links.push({'route': file, 'text': text[1], 'link': text[2]});
+        links.push({'file': file, 'text': text[1], 'href': text[2]});
         }
     return links;
     }
@@ -118,15 +118,25 @@ const getLinks = (filePath) => {
 return links;
 }
 
-console.log(getLinks(pathTest));
-  getLinks(pathTest)
-
-
+/* console.log(getLinks(pathTest));
+  getLinks(pathTest) */
 
 //retornar:
 /*{href: "http",
 text: " Texto que aparecía dentro del link ",
 file:"Ruta del archivo donde se encontró el link "}*/
+
+/* [{
+    file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
+    text: 'Promise - MDN',
+    href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
+  },
+  {
+    file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
+    text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',
+    href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'
+  }
+] */
 
 module.exports={
     pathExistFun,
