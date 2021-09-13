@@ -1,7 +1,3 @@
-//const {mdLinks} = require('../index');
-
-//const { text } = require('express');
-
 const { pathExistFun, pathIsAbsolute, pathResolveAbsolute, pathIsFile, listOfFiles, fileIsMd, getLinks } = require( '../functions');
 
 const pathSpec = 'text.txt';
@@ -26,13 +22,13 @@ const filesMd = [
   'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md'
 ] 
 const containerLink =[
- { route: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md', 
+ { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md', 
   text: 'Promise - MDN',  
-    link: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
+    href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
     },
- { route: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',  
+ { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',  
  text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',  
- link: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'  
+ href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'  
 }
 ];
 /*describe('mdLinks', () => {
