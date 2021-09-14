@@ -2,108 +2,63 @@
 
 /*const mdLinks = () => {
 } */
-//import fetch from './node-fetch/@types/index.js';
 
 
-/*  const fs = require('fs'); //"c:/Users/nadia/Documents/GitHub/MDLink/LIM015-md-links2/node_modules/node-fetch/@types/index
-const path = require('path');   */
-
-//import getLinks from '../LIM015-md-links2/functions';
-//C:\Users\nadia\Documents\GitHub\MDLink\LIM015-md-links2\node_modules\node-fetch\src\index.js
-//{import fetch from "./node-fetch/src/index.cjs";}
-
-//const getLinks = require('functions')
-const marked = require('marked');
-const jsdom = require('jsdom');
-const {  JSDOM} = jsdom;
 const fetch = require('node-fetch');
+//const fetchModules = require('node-fetch')
 
-const {  readFileMd,} = require('./path');
-const {  searchFilesMd,} = require('./filesMd');
-
-
-//VERIFICA SI archivo.md TIENE LINKS, Y GUARDANDO SUS PROPIEDADES {href, text, file} EN ARRAY
-const linksOfFileMd = (myPath) => {
-  const arrayFilesMd = searchFilesMd(myPath);
-  const arrayLinksProperties = [];
-  arrayFilesMd.forEach((fileMd) => {
-    //Pasando texto md a html
-    const tokens = marked.lexer(readFileMd(fileMd));
-    const html = marked.parser(tokens);
-    //RECREANDO DOM
-    const dom = new JSDOM(html);
-    const extractingLinks = dom.window.document.querySelectorAll('a');
-
-    extractingLinks.forEach((link) => {
-      arrayLinksProperties.push({
-        href: link.href,
-        text: link.text,
-        file: fileMd,
-      });
-    });
-  });
-  return arrayLinksProperties;
-};
-
-
-//ALMACENANDO STATUS DE LINKS {href, text, file, status, statusText} EN ARRAY
-const linksStatus = (arrayLinks) => {
-  const arrayLinksStatus = [];
-  arrayLinks.forEach((link) => {
-    arrayLinksStatus.push(fetch(link.href)
-      .then((response) => {
-        if (response.status >= 200 && response.status < 400) {
-          return {
-            file: link.file,
-            href: link.href,
-            text: link.text,
-            status: response.status,
-            statusText: 'ok',
-          }
-        } else {
-          return {
-            file: link.file,
-            href: link.href,
-            text: link.text,
-            status: response.status,
-            statusText: 'fail',
-          }
-        };
-      })
-      .catch(() => {
-        return {
-          file: link.file,
-          href: link.href,
-          text: link.text,
-          status: 404,
-          statusText: 'fail',
-        }
-      }));
-  });
-  return Promise.all(arrayLinksStatus);
-}
-
-
-module.exports = {
-  linksOfFileMd,
-  linksStatus,
-};
-
-pathTest = process.argv[2];
-
-
-//import fetch from 'node-fetch';
-fetch("https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce/1")
-  //.then(response => response.json())
- // .then(res => res())          // convert to plain text
-  .then(res =>{  // then log it out
-
-  if(res.status === 200){
-    console.log(  `${res.status} ${res.statusText}`)
+const getLinks = (filePath) => {
+    
+  let links = [];
+  fileIsMd(filePath).forEach((file)=>{
+  const content = fs.readFileSync(file, 'utf-8');
+  const regexMdLinks =  /\[([^\[]+)\](\(http.*\))/gm;
+  const matches = content.match(regexMdLinks);
+ 
+  if(matches === null){
+      return " this file does not have any links";
   }else{
-    console.log("fail")
+      const singleMatch = /\[([^\[]+)\]\((.*)\)/;
+      for (let i = 0; i < matches.length; i++) {
+      let text = singleMatch.exec(matches[i]);
+      links.push({'file': file, 'text': text[1], 'href': text[2]});
+      }
+  return links;
   }
 })
+return links;
+}
+
+//const pruebaLinks = getLinks(process.argv[2])
+/* console.log(getLinks(pathTest));
+getLinks(pathTest) */ 
+
+  fetch('https://google.com')
+    .then(res => res.text())
+    .then(text => console.log(text))  
+    
+
+
+const getStatus = (prueba) =>{
+  const contenedor = prueba.map((item)=>{
+  fetch(item.href)
+  .then(response => response.json())
+ .then(res => res())          // convert to plain text
+  .then(res =>{  // then log it out
+
+    if ( res.ok > 200 || res.ok < 300){
+      console.log( 'success')
+      }else{
+      console.log( "Not successfull")
+      }
+}).then(data => console.log(data))
+.catch(error => console.log( err.message))
+})
+return contenedor
+}
+
+getStatus (links)
+
 
  /* fetch("https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce/1")
   //.then(response => response.json())

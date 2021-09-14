@@ -1,5 +1,6 @@
 /* import { existsSync, readdirSync, statSync, readFileSync } from 'fs';
 import { isAbsolute, resolve, extname } from 'path'; */
+const fetch = require('node-fetch');
  const fs = require('fs');
  const path = require('path');
 
@@ -96,7 +97,7 @@ console.log(fileIsMd(pathTest)); */
   ] */
   
 
-const getLinks = (filePath) => {
+ const getLinks = (filePath) => {
     
     let links = [];
     fileIsMd(filePath).forEach((file)=>{
@@ -118,9 +119,40 @@ const getLinks = (filePath) => {
 return links;
 }
 
-/* console.log(getLinks(pathTest));
-  getLinks(pathTest) */
+// console.log(getLinks(pathTest));
+ const arrayWithLinks = getLinks(pathTest) 
 
+const getStatus = (pathLinks) =>{
+ 
+ const container = pathLinks.map((item)=>{
+       // console.log(item.href, 128)
+   fetch(item.href).then(res =>{
+            if ( res.ok){
+            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, 'texto': res.ok })
+            }else{
+           return ({'href' : res.url,'Text':item.text, 'file': item.file, 'FAILED': res.status,'ok': res.statusText, 'texto': res.ok })
+            }
+        
+        }).then(data => console.log(data))
+        .catch(error => console.log( error.message))
+        
+       
+        })
+ //casa.push(container)
+  return container
+     
+}  
+
+//console.log( getStatus(arrayWithLinks))
+ getStatus(arrayWithLinks) 
+ 
+
+ 
+
+
+ 
+
+ 
 //retornar:
 /*{href: "http",
 text: " Texto que aparecía dentro del link ",
