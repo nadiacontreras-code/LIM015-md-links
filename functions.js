@@ -127,14 +127,17 @@ const getStatus = (pathLinks) =>{
  const container = pathLinks.map((item)=>{
        // console.log(item.href, 128)
    fetch(item.href).then(res =>{
-            if ( res.ok){
-            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, 'texto': res.ok })
+            if ( res.ok ){
+            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, /*'texto': res.ok */})
             }else{
-           return ({'href' : res.url,'Text':item.text, 'file': item.file, 'FAILED': res.status,'ok': res.statusText, 'texto': res.ok })
+           return ({'href' : res.url,'Text':item.text, 'file': item.file, /*'FAILED': res.status,'ok': res.statusText, 'texto': res.ok */})
             }
         
         }).then(data => console.log(data))
-        .catch(error => console.log( error.message))
+        .catch(error => 
+            ({'href' : item.href,'Text':item.text, 'file': item.file, 'FAILED2': error})
+        )
+            
         
        
         })
@@ -144,7 +147,7 @@ const getStatus = (pathLinks) =>{
 }  
 
 //console.log( getStatus(arrayWithLinks))
- getStatus(arrayWithLinks) 
+ //getStatus(arrayWithLinks) 
  
 
  
@@ -177,7 +180,8 @@ module.exports={
     pathIsFile,
     listOfFiles,
     fileIsMd,
-    getLinks
+    getLinks,
+    getStatus
     
     
 }
