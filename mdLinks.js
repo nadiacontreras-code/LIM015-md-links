@@ -2,95 +2,44 @@
 
 /*const mdLinks = () => {
 } */
-
-
+const {getLinks} = require('./functions')
 const fetch = require('node-fetch');
-//const fetchModules = require('node-fetch')
+const pathTest = process.argv[2];
 
-const getLinks = (filePath) => {
-    
-  let links = [];
-  fileIsMd(filePath).forEach((file)=>{
-  const content = fs.readFileSync(file, 'utf-8');
-  const regexMdLinks =  /\[([^\[]+)\](\(http.*\))/gm;
-  const matches = content.match(regexMdLinks);
- 
-  if(matches === null){
-      return " this file does not have any links";
-  }else{
-      const singleMatch = /\[([^\[]+)\]\((.*)\)/;
-      for (let i = 0; i < matches.length; i++) {
-      let text = singleMatch.exec(matches[i]);
-      links.push({'file': file, 'text': text[1], 'href': text[2]});
-      }
-  return links;
-  }
-})
-return links;
+
+
+/* const getStatus = (pathPrueba) =>{
+  const arrayWithLinks = getLinks(pathPrueba) 
+let container = [];
+container = arrayWithLinks.map((item)=> {
+     // console.log(item.href, 128)
+let resultFetch = fetch(item.href)
+      .then(res =>{
+          if ( res.status >= 200 && res.status < 301){
+          return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, /*'texto': res.ok */ //})
+       //   }else{
+       //  return ({'href' : res.url,'Text':item.text, 'file': item.file, /*'FAILED': res.status,'ok': res.statusText, 'texto': res.ok */})
+        /*   }
+      }).then(data =>console.log(data))
+      .catch(error =>
+          ({'href' : item.href,'Text':item.text, 'file': item.file, 'FAILED2': error})
+      )
+      return resultFetch;
+      })
+//console.log(container,141)
+return (container)
 }
 
-//const pruebaLinks = getLinks(process.argv[2])
-/* console.log(getLinks(pathTest));
-getLinks(pathTest) */ 
-
-  fetch('https://google.com')
-    .then(res => res.text())
-    .then(text => console.log(text))  
-    
+getStatus(pathTest) */ 
+/* .then(data =>console.log(data))
+.catch(error => console.log(error))  */
 
 
-const getStatus = (prueba) =>{
-  const contenedor = prueba.map((item)=>{
-  fetch(item.href)
-  .then(response => response.json())
- .then(res => res())          // convert to plain text
-  .then(res =>{  // then log it out
 
-    if ( res.ok > 200 || res.ok < 300){
-      console.log( 'success')
-      }else{
-      console.log( "Not successfull")
-      }
-}).then(data => console.log(data))
-.catch(error => console.log( err.message))
-})
-return contenedor
-}
-
-getStatus (links)
-
-
- /* fetch("https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce/1")
-  //.then(response => response.json())
- // .then(res => res())          // convert to plain text
-  .then(text => console.log(text))  // then log it out
-  .then(data => {
-    console.log(data)
-  })
-  .catch(err => console.log(err.message))
- // fetch('/users')
-  // .then(res => res.json()) // comment this out for now 
- */
  
-/* fetch("https://swapi.co/api/people/3")
-  .then(promesaFetch => promesaFetch.json())
-  .then(contenido => console.log(contenido)); */
 
-/*  const getStatus = (path) => {
-   getLinks(path).map((item)=>{
-    console.log(item.link,22);
- fetch(item.href)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
-  })
-  .catch(err => console.log(err.message))
-  })
-  //console.log(prueba,25);
-}
- 
-console.log(getStatus(pathTest))
-getStatus(pathTest)  */
+
+
 
 /* const mdLinks2 = (path0) => {
     const promise = new Promise((resolve, reject) => {

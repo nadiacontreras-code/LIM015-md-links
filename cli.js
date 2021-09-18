@@ -1,34 +1,46 @@
-const fetch = require('node-fetch')
-const { getLinks} = require('./functions')
+const fetch = require('node-fetch');
+const pathR = require('path');
+const { getLinks} = require('./functions');
 
 const pathTest = process.argv[2];
 const pathTestTwo = process.argv[3];
 
 const arrayWithLinks = getLinks(pathTest)
 //console.log(arrayWithLinks)
-/* 
-const captureValidate = (path) => {
-    const objStats  = path.map((item)=>{
-        fetch( item.href)
-        .then((res) =>{
-         if(pathTestTwo === '--validate'){
-          return ({'file': item.file,'href' : res.url,'status': res.statusText, 'status2': res.status,'Text':item.text})
-             //return (item.file, item.href, res.status , res.ok, item.text)
-         }
-        
-        
-    }).catch((err) =>console.log(err.message))
-   
-  })
-  return objStats
-} */
-//  captureValidate(arrayWithLinks)
 
 const captureByDefault = (path) => {
     if (pathTestTwo === undefined){
     return getLinks(path)
+    }else{
+        return "comand is not correct"
     }
 }
+/* console.log(captureByDefault(pathTest),36)
+captureByDefault(pathTest) */
 
-//console.log(captureByDefault(pathTest),36)
-captureByDefault(pathTest)
+
+
+const captureValidate = (path) => {
+    const objStats  = path.map((item)=>{
+        fetch( item.href)
+        .then((res) =>{
+         if(pathTestTwo === '--validate' ){
+            // const pathRel = item.file
+          return  `${item.file} ${res.url } ${res.statusText} ${res.status } ${item.text }`
+          //({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, /*'texto': res.ok */})
+             //return (item.file, item.href, res.status , res.ok, item.text)
+         }else{
+             return 'something is wrong'
+         }
+        
+        }).then(data => console.log(data))
+    
+    .catch((err) =>console.log(err))
+   
+  })
+  return objStats
+} 
+ captureValidate(arrayWithLinks)
+
+ 
+

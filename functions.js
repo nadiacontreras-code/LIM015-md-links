@@ -8,53 +8,41 @@ const fetch = require('node-fetch');
 const pathTest = process.argv[2];
 //console.log(pathTest);
 
- const pathExistFun = (pathPrueba) => {
-    try{
-        const pathExist2 = fs.existsSync(pathPrueba);
-        return pathExist2;
-       
-    }catch(err){
-        console.log(err.message);
-    }
+const pathExistFun = (pathPrueba) => {
+    const pathExist2 = fs.existsSync(pathPrueba);
+    return pathExist2;
 }
 //pathExistFun(pathTest)
 
 const pathIsAbsolute = (pathPrueba) => {
     const pathIsAbsolute = path.isAbsolute(pathPrueba);
     if(pathIsAbsolute){
-    return pathPrueba
+        return pathPrueba
     }else{
         return pathResolveAbsolute(pathPrueba);
     }
-   
 }
 //pathResolveAbsolute(pathTest)
 
 const pathResolveAbsolute = (pathPrueba) => {
-    try{
-       const pathToAbs = path.resolve(pathPrueba); 
-       return pathToAbs;
-    }catch (e) {
-        console.log(e.message)
-    }
+    const pathToAbs = path.resolve(pathPrueba); 
+    return pathToAbs;
 }
 //pathResolveAbsolute(pathTest)
 
 const listOfFiles = (pathPrueba) => {
-   
     const directoryContent = fs.readdirSync(pathPrueba)
     const containerFiles = directoryContent.map(file => {
         if(path.extname(file) == ''){
             const pathPrueba2 = path.resolve(`${pathPrueba}/${file}`)
             return listOfFiles(pathPrueba2)
         }else{
-           
             return pathIsAbsolute(path.resolve(`${pathPrueba}/${file}`));
         }
     })
     const joiningArrays = (containerFiles)=> {
         return containerFiles.reduce((acc, val) => Array.isArray(val) ? acc.concat(joiningArrays(val)) : acc.concat(val), []);
-   }
+    }
   //console.log(joiningArrays(containerFiles))
 return joiningArrays(containerFiles);
 }
@@ -69,24 +57,20 @@ const pathIsFile = (pathPrueba) => {
     }else{
         return listOfFiles(pathIsAbsolute(pathPrueba))
     }
-
 }
-/* console.log(pathIsFile(pathTest) );
+/*  console.log(pathIsFile(pathTest) );
 pathIsFile(pathTest) 
  */
 const fileIsMd= (pathPrueba)=>{
- 
     const containerMd =[]
     pathIsFile(pathPrueba).filter((item)=>{
-        
     //['cuaderno.txt', 'readme.md', 'app.js', 'biblioteca.md', 'oficina.txt', 'indexPrueba.js', 'read.txt', 'rutaNotas.md']
     if(path.extname(item) === '.md'){
-            const casa =item
-            containerMd.push(casa)
+            const fileDirMd =item
+            containerMd.push(fileDirMd)
         }
     })
-    
- return containerMd
+return containerMd
 }
 /* fileIsMd(pathTest)
 console.log(fileIsMd(pathTest)); */
@@ -95,16 +79,16 @@ console.log(fileIsMd(pathTest)); */
     'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\firstDirectory\\secondDIrectoy\\biblioteca.md',
     'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md"
   ] */
-  
 
- const getLinks = (filePath) => {
-    
+
+const getLinks = (filePath) => {
     let links = [];
-    fileIsMd(filePath).forEach((file)=>{
+   fileIsMd(filePath).forEach((file)=>{
+      
     const content = fs.readFileSync(file, 'utf-8');
     const regexMdLinks =  /\[([^\[]+)\](\(http.*\))/gm;
     const matches = content.match(regexMdLinks);
-   
+
     if(matches === null){
         return " this file does not have any links";
     }else{
@@ -118,60 +102,45 @@ console.log(fileIsMd(pathTest)); */
 })
 return links;
 }
+console.log(getLinks(pathTest));
 
-// console.log(getLinks(pathTest));
- const arrayWithLinks = getLinks(pathTest) 
 
 const getStatus = (pathLinks) =>{
- 
- const container = pathLinks.map((item)=>{
+   const arrayWithLinks = getLinks(pathLinks) 
+let container = [];
+    container = arrayWithLinks.map((item)=> {
        // console.log(item.href, 128)
-   fetch(item.href).then(res =>{
-            if ( res.ok ){
-            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, /*'texto': res.ok */})
+        let resultFetch =  fetch(item.href)
+        .then(res =>{
+            if ( res.status >= 200 && res.status < 301){
+            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText }) //'texto': res.ok 
             }else{
-           return ({'href' : res.url,'Text':item.text, 'file': item.file, /*'FAILED': res.status,'ok': res.statusText, 'texto': res.ok */})
+           return ({'href' : res.url,'Text':item.text, 'file': item.file,'status': res.status, 'ok': 'FAIL' }) //ok': res.statusText, 'texto': res.ok 
             }
-        
-        }).then(data => console.log(data))
-        .catch(error => 
-            ({'href' : item.href,'Text':item.text, 'file': item.file, 'FAILED2': error})
-        )
-            
-        
-       
         })
- //casa.push(container)
-  return container
-     
-}  
+        .catch(()=>{
+            ({'href' : item.href,'Text':item.text, 'file': item.file, 'status': 'No status', 'ok': 'FAIL'})
+        })
+    return resultFetch;
+    })
+//console.log(container,141)
+return Promise.all(container)
+//return container
+}
+/* getStatus(pathTest)
+console.log(getStatus(pathTest)) */
 
-//console.log( getStatus(arrayWithLinks))
- //getStatus(arrayWithLinks) 
+/* getStatus(pathTest)
+.then(data =>console.log(data))
+.catch(error => console.log(error))  
+  */
+ 
+
+
  
 
  
 
-
- 
-
- 
-//retornar:
-/*{href: "http",
-text: " Texto que aparecía dentro del link ",
-file:"Ruta del archivo donde se encontró el link "}*/
-
-/* [{
-    file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
-    text: 'Promise - MDN',
-    href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
-  },
-  {
-    file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
-    text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',
-    href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'
-  }
-] */
 
 module.exports={
     pathExistFun,
