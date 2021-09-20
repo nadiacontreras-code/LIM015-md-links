@@ -1,5 +1,3 @@
-/* import { existsSync, readdirSync, statSync, readFileSync } from 'fs';
-import { isAbsolute, resolve, extname } from 'path'; */
 const fetch = require('node-fetch');
  const fs = require('fs');
  const path = require('path');
@@ -64,22 +62,15 @@ pathIsFile(pathTest)
 const fileIsMd= (pathPrueba)=>{
     const containerMd =[]
     pathIsFile(pathPrueba).filter((item)=>{
-    //['cuaderno.txt', 'readme.md', 'app.js', 'biblioteca.md', 'oficina.txt', 'indexPrueba.js', 'read.txt', 'rutaNotas.md']
-    if(path.extname(item) === '.md'){
+        if(path.extname(item) === '.md'){
             const fileDirMd =item
             containerMd.push(fileDirMd)
+        }else{
+            return `${item} is not md extention`
         }
     })
 return containerMd
 }
-/* fileIsMd(pathTest)
-console.log(fileIsMd(pathTest)); */
-/*[
-    'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\firstDirectory\\readme.md',
-    'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\firstDirectory\\secondDIrectoy\\biblioteca.md',
-    'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md"
-  ] */
-
 
 const getLinks = (filePath) => {
     let links = [];
@@ -95,51 +86,15 @@ const getLinks = (filePath) => {
         const singleMatch = /\[([^\[]+)\]\((.*)\)/;
         for (let i = 0; i < matches.length; i++) {
         let text = singleMatch.exec(matches[i]);
-        links.push({'file': file, 'text': text[1], 'href': text[2]});
+        links.push({ 'href': text[2],'text': text[1],'file': file});
         }
     return links;
     }
 })
 return links;
 }
-console.log(getLinks(pathTest));
+//console.log(getLinks(pathTest),107);
 
-
-const getStatus = (pathLinks) =>{
-   const arrayWithLinks = getLinks(pathLinks) 
-let container = [];
-    container = arrayWithLinks.map((item)=> {
-       // console.log(item.href, 128)
-        let resultFetch =  fetch(item.href)
-        .then(res =>{
-            if ( res.status >= 200 && res.status < 301){
-            return ({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText }) //'texto': res.ok 
-            }else{
-           return ({'href' : res.url,'Text':item.text, 'file': item.file,'status': res.status, 'ok': 'FAIL' }) //ok': res.statusText, 'texto': res.ok 
-            }
-        })
-        .catch(()=>{
-            ({'href' : item.href,'Text':item.text, 'file': item.file, 'status': 'No status', 'ok': 'FAIL'})
-        })
-    return resultFetch;
-    })
-//console.log(container,141)
-return Promise.all(container)
-//return container
-}
-/* getStatus(pathTest)
-console.log(getStatus(pathTest)) */
-
-/* getStatus(pathTest)
-.then(data =>console.log(data))
-.catch(error => console.log(error))  
-  */
- 
-
-
- 
-
- 
 
 
 module.exports={
@@ -150,11 +105,6 @@ module.exports={
     listOfFiles,
     fileIsMd,
     getLinks,
-    getStatus
-    
-    
 }
-//}*/
 
-  
- 
+
