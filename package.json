@@ -7,20 +7,22 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --verbose --coverage"
+    "test": "jest --verbose --coverage "
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nadiacontreras-code/LIM015-md-links.git"
   },
-  "author": "Nadia",
+  "author": "Nadia Contreras",
   "license": "ISC",
+  "bin":{
+  "say-hello": "./cli.js"
+  },
   "bugs": {
     "url": "https://github.com/nadiacontreras-code/LIM015-md-links/issues"
   },
   "homepage": "https://github.com/nadiacontreras-code/LIM015-md-links#readme",
   "dependencies": {
-    "fs": "0.0.1-security",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {

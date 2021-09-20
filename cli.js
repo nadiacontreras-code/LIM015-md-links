@@ -1,11 +1,15 @@
-const fetch = require('node-fetch');
-const pathR = require('path');
-const { getLinks} = require('./functions');
+#! / usr / bin / env nodo
+
+const mdLinks = require('./mdLinks');
+// Grab provided args.
+const [, , ...args] = process.argv;
+console.log(`hola Mundo ${args}`,6)
+
 
 const pathTest = process.argv[2];
 const pathTestTwo = process.argv[3];
 
-const arrayWithLinks = getLinks(pathTest)
+//const arrayWithLinks = getLinks(pathTest)
 //console.log(arrayWithLinks)
 
 const captureByDefault = (path) => {
@@ -40,7 +44,7 @@ const captureValidate = (path) => {
   })
   return objStats
 } 
- captureValidate(arrayWithLinks)
+ //captureValidate(arrayWithLinks)
 
  
 
