@@ -1,18 +1,13 @@
-const { pathExistFun, pathIsAbsolute, pathResolveAbsolute, pathIsFile, listOfFiles, fileIsMd, getLinks, getStatus } = require( '../functions');
+const { pathExistFun, pathIsAbsolute, pathResolveAbsolute, pathIsFile, listOfFiles, fileIsMd, getLinks } = require( '../functions.js');
 
-/*describe('mdLinks', () => {
 
-  it('should...', () => {
-    console.log('FIX ME!');
-  });
-
-});*/
+const pasTest = 'text.txt'
 describe('pathExistFun', () => {
   it('should be a function', () => {
     expect(typeof pathExistFun).toBe('function');
   });
-  test('should be a exist path ', () => {
-    expect(pathExistFun('text.txt')).toBe(true);
+  it('should be a exist path ', () => {
+    expect(pathExistFun(pasTest)).toBe(true);
   });
 
 });
@@ -77,66 +72,29 @@ describe('fileIsMd', () => {
   });
 });
 describe('getLinks', () => {
-  const containerLink =[
-    { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md', 
-      text: 'Promise - MDN',  
-      href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
+  const containerLink =
+  [
+    { href: 'https://www.freecodecamp.org/news/',
+      text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',
+      file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
     },
-    { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',  
-    text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',  
-    href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'  
-   } ];
+    {
+      href: "https://http.cat/4040",
+      text: "Probando con 404",
+      file: "C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md",
+    },
+    {
+      href: 'https://github.com/FabianBravoA/2018-1-TallerPromesasDirFilesJest',
+      text: 'Taller de Promesa',
+      file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
+    }
+  ];
   it('should be a function', () => {
     expect(typeof getLinks).toBe('function');
   });
-  test('should show a object ', () => {
+  test('should show an array with object (elements of the arrays) ', () => {
     expect(getLinks('prueba\\rutaNotas.md')).toStrictEqual(containerLink);
   });
 });
 
- 
-  const containerLink =[
-    { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md', 
-      text: 'Promise - MDN',  
-      href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise'
-    },
-    { file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',  
-    text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',  
-    href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/'  
-   } ];
-  const arrayStatus = [
-    {
-      href: 'https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Promise',
-      Text: 'Promise - MDN',
-      file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
-      status: 200,
-      ok: 'OK'
-    },
-    {
-      href: 'https://www.freecodecamp.org/news/how-to-write-a-javascript-promise-4ed8d44292b8/',
-      Text: 'How to Write a JavaScript Promise - freecodecamp (en inglés)',
-      file: 'C:\\Users\\nadia\\Documents\\GitHub\\MDLink\\LIM015-md-links2\\prueba\\rutaNotas.md',
-      status: 200,
-      ok: 'OK'
-    }
-  ];
 
-describe('getStatus', () => {
-  it('should be a function', () => {
-      expect(typeof getStatus).toBe('function');
-  });
-  test('the getStatus es una promesa resuelta', () => {
-    return getStatus('prueba\\rutaNotas.md').then(data => {
-      expect(data).toBe(arrayStatus);
-    });
-  });
-});
-/* test('the data is peanut butter', () => {
-  return fetchData().then(data => {
-    expect(data).toBe('peanut butter');
-  });
-}); */
-
-/* test('the data is peanut butter', () => {
-  return expect(fetchData()).resolves.toBe('peanut butter');
-}); */
