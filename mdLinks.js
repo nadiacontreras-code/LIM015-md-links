@@ -7,7 +7,7 @@ const path = require('path');
 
 const{pathExistFun,  fileIsMd,  getLinks  } = require('./functions');
 
-
+const pathTest = process.argv[2]
 const getStatus = (pathLinks) =>{
   const arrayWithLinks = getLinks(pathLinks)
   let container = [];
@@ -17,12 +17,13 @@ const getStatus = (pathLinks) =>{
         .then(res =>{
             if ( res.status >= 200 && res.status < 299){
             return ({'href' : res.url,'text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText }) //'texto': res.ok 
+            
             }else{
           return ({'href' : res.url,'text':item.text, 'file': item.file,'status': res.status, 'ok': 'FAIL' }) //ok': res.statusText, 'texto': res.ok 
             }
         })
         .catch(()=>{
-            ({'href' : item.href,'text':item.text, 'file': item.file, 'status': 'No status', 'ok': 'FAIL'})
+          return  ({'href' : item.href,'text':item.text, 'file': item.file, 'status': 'No status', 'ok': 'FAIL'})
         })
     return resultFetch;
     })
@@ -30,17 +31,11 @@ const getStatus = (pathLinks) =>{
   return Promise.all(container)
   //return container
 }
-/* getStatus(pathTest)
-console.log(getStatus(pathTest)) */
 
-/* getStatus(pathTest)
-.then(data =>console.log(data))
-.catch(error => console.log(error))  
-*/
+/*   getStatus(pathTest)
+.then(data =>console.log(data,39))
+.catch(error => console.log(error))    */
 
-const pathTest = process.argv[2]
-
-//console.log(pathTest2, 42)
 
 //options es un {prop(validate): valor(true/false) }
 
@@ -55,31 +50,38 @@ const mdLinks = (path0, options)=>{
           resolve ( getLinks(path0))
           }else{
             resolve( getStatus(path0))
-
           }
       }else{
-       // console.log(`${path0} does not have any links`, 78)
-        return `${path0} does not have any links`
+       return `${path0} does not have any links`
       }
     }else{
-    //console.log( `${pathIsAbsolute(path0)} does not a file with md-extention`, 75)
-     return `${path0} does not a file with md-extention`
+      return `${path0} does not a file with md-extention`
     }
   }else{
     return `${path0} does not exist`
   }
 })
 };
- /* mdlinks(pathTest, {validate: false})
-console.log(mdlinks(pathTest, {validate: false}),73) */
+ /* mdLinks(pathTest, {validate: false})
+console.log(mdLinks(pathTest, {validate: false}),73) */
 
-//mdlinks(pathTest, {validate: true})
-//console.log(mdlinks(pathTest, {validate: true}),76) 
+//mdLinks(pathTest, {validate: true})
+//console.log(mdLinks(pathTest, {validate: true}),76)
 
-// mdlinks(pathTest)
-//console.log(mdlinks(pathTest), 79) 
+// mdLinks(pathTest)
+//console.log(mdLinks(pathTest), 79)
 
-//mdlinks(pathTest, {validate: false}).then(data=>console.log(data, 82))
+//mdLinks(pathTest, {validate: true}).then(data=>console.log(data, 82))
+
+/* mdLinks(pathTest)
+.then(data =>console.log(data))
+.catch(error => console.log(error))
+
+  */
+
+
+
+
 
 
 module.exports = {mdLinks, getStatus}

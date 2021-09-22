@@ -1,50 +1,42 @@
 #! / usr / bin / env nodo
 
-const mdLinks = require('./mdLinks');
+const {mdLinks} = require('./mdLinks');
+const chalk = require('chalk');
+const { capturateStats, capturateStatsValidate} = require('./comandLine')
 // Grab provided args.
 const [, , ...args] = process.argv;
-console.log(`hola Mundo ${args}`,6)
 
 
-const pathTest = process.argv[2];
-const pathTestTwo = process.argv[3];
 
-//const arrayWithLinks = getLinks(pathTest)
-//console.log(arrayWithLinks)
+if(args.length === 1) {
+    return mdLinks(args[0],  { validate: false })
+    .then(data =>console.log(data))
+    .catch(err => console.log(err))
+}
 
-const captureByDefault = (path) => {
-    if (pathTestTwo === undefined){
-    return getLinks(path)
-    }else{
-        return "comand is not correct"
+if(args.length == 2){
+    switch (args[1] ) {
+        case '--validate':
+            return mdLinks(args[0],  { validate: true })
+            .then(data => data.forEach((item)=>{
+            console.log(`${chalk.magenta(item.file)} ${item.href} ${chalk.green(item.ok)} ${chalk.yellowBright.bold(item.status)} ${item.text}`, 14)
+            //return (`${chalk.magenta(item.file)} ${item.href} ${chalk.green(item.ok)} ${chalk.yellowBright.bold(item.status)} ${item.text}`)
+            }))
+            .catch((err) =>console.log(err))
+        break;
+        case '--stats':
+            return mdLinks(args[0],  { validate:true})
+            .then(data => console.log(capturateStats(data),36))
+            .catch((err) =>console.log(err))
+        break;
     }
 }
-/* console.log(captureByDefault(pathTest),36)
-captureByDefault(pathTest) */
+if(args.length == 3) {
+    if((args[1] =='--validate' && args[2] == '--stats')|| (args[1] =='--stats' && args[2] =='--validate')) {
+        return mdLinks(args[0],  { validate:true})
+        .then(data => console.log(capturateStatsValidate(data),44))
+        .catch((err) =>console.log(err))
+    }
+}
 
-
-
-const captureValidate = (path) => {
-    const objStats  = path.map((item)=>{
-        fetch( item.href)
-        .then((res) =>{
-         if(pathTestTwo === '--validate' ){
-            // const pathRel = item.file
-          return  `${item.file} ${res.url } ${res.statusText} ${res.status } ${item.text }`
-          //({'href' : res.url,'Text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText, /*'texto': res.ok */})
-             //return (item.file, item.href, res.status , res.ok, item.text)
-         }else{
-             return 'something is wrong'
-         }
-        
-        }).then(data => console.log(data))
-    
-    .catch((err) =>console.log(err))
-   
-  })
-  return objStats
-} 
- //captureValidate(arrayWithLinks)
-
- 
-
+//captureStats(pathTest)
