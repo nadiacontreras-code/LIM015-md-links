@@ -15,8 +15,8 @@
   },
   "author": "Nadia Contreras",
   "license": "ISC",
-  "bin":{
-  "say-hello": "./cli.js"
+  "bin": {
+    "md-links": "./cli.js"
   },
   "bugs": {
     "url": "https://github.com/nadiacontreras-code/LIM015-md-links/issues"
