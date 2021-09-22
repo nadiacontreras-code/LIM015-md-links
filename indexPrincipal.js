@@ -1,4 +1,36 @@
-/*const mdLinks = require('../prueba/mdLinks'); */
+// index.js exporta la funcion mdLinks
+/*const mdLinks = require('./mdLinks'); */
+
+
+const  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*function readfile (path, response) {
   fs.readFile(path, function (error,data){
   if (error){
@@ -15,14 +47,7 @@ response.end();
  
  };
  */
- //import fetch from "node-fetch";
-/*  const fs = require('fs');
- const path = require('path'); 
-
- const { getStatus } = require('./mdLinks.js') */
-
-
-
+ 
 
 
 

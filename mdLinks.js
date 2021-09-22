@@ -1,161 +1,112 @@
-/* Index.js exporta una función  mdlinks.js
-
 /*const mdLinks = () => {
 } */
-//import fetch from './node-fetch/@types/index.js';
 
-
-/*  const fs = require('fs'); //"c:/Users/nadia/Documents/GitHub/MDLink/LIM015-md-links2/node_modules/node-fetch/@types/index
-const path = require('path');   */
-
-//import getLinks from '../LIM015-md-links2/functions';
-//C:\Users\nadia\Documents\GitHub\MDLink\LIM015-md-links2\node_modules\node-fetch\src\index.js
-//{import fetch from "./node-fetch/src/index.cjs";}
-
-//const getLinks = require('functions')
-const marked = require('marked');
-const jsdom = require('jsdom');
-const {  JSDOM} = jsdom;
 const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
 
-const {  readFileMd,} = require('./path');
-const {  searchFilesMd,} = require('./filesMd');
+const{pathExistFun,  fileIsMd,  getLinks  } = require('./functions');
 
-
-//VERIFICA SI archivo.md TIENE LINKS, Y GUARDANDO SUS PROPIEDADES {href, text, file} EN ARRAY
-const linksOfFileMd = (myPath) => {
-  const arrayFilesMd = searchFilesMd(myPath);
-  const arrayLinksProperties = [];
-  arrayFilesMd.forEach((fileMd) => {
-    //Pasando texto md a html
-    const tokens = marked.lexer(readFileMd(fileMd));
-    const html = marked.parser(tokens);
-    //RECREANDO DOM
-    const dom = new JSDOM(html);
-    const extractingLinks = dom.window.document.querySelectorAll('a');
-
-    extractingLinks.forEach((link) => {
-      arrayLinksProperties.push({
-        href: link.href,
-        text: link.text,
-        file: fileMd,
-      });
-    });
-  });
-  return arrayLinksProperties;
-};
-
-
-//ALMACENANDO STATUS DE LINKS {href, text, file, status, statusText} EN ARRAY
-const linksStatus = (arrayLinks) => {
-  const arrayLinksStatus = [];
-  arrayLinks.forEach((link) => {
-    arrayLinksStatus.push(fetch(link.href)
-      .then((response) => {
-        if (response.status >= 200 && response.status < 400) {
-          return {
-            file: link.file,
-            href: link.href,
-            text: link.text,
-            status: response.status,
-            statusText: 'ok',
-          }
-        } else {
-          return {
-            file: link.file,
-            href: link.href,
-            text: link.text,
-            status: response.status,
-            statusText: 'fail',
-          }
-        };
-      })
-      .catch(() => {
-        return {
-          file: link.file,
-          href: link.href,
-          text: link.text,
-          status: 404,
-          statusText: 'fail',
-        }
-      }));
-  });
-  return Promise.all(arrayLinksStatus);
+const pathTest = process.argv[2]
+const getStatus = (pathLinks) =>{
+  const arrayWithLinks = getLinks(pathLinks)
+  let container = [];
+    container = arrayWithLinks.map((item)=> {
+      // console.log(item.href, 128)
+        let resultFetch =  fetch(item.href)
+        .then(res =>{
+            if ( res.status >= 200 && res.status < 299){
+            return ({'href' : res.url,'text':item.text, 'file': item.file, 'status': res.status, 'ok': res.statusText }) //'texto': res.ok 
+            
+            }else{
+          return ({'href' : res.url,'text':item.text, 'file': item.file,'status': res.status, 'ok': 'FAIL' }) //ok': res.statusText, 'texto': res.ok 
+            }
+        })
+        .catch(()=>{
+          return  ({'href' : item.href,'text':item.text, 'file': item.file, 'status': 'No status', 'ok': 'FAIL'})
+        })
+    return resultFetch;
+    })
+  //console.log(container,29)
+  return Promise.all(container)
+  //return container
 }
 
-
-module.exports = {
-  linksOfFileMd,
-  linksStatus,
-};
-
-pathTest = process.argv[2];
+/*   getStatus(pathTest)
+.then(data =>console.log(data,39))
+.catch(error => console.log(error))    */
 
 
-//import fetch from 'node-fetch';
-fetch("https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce/1")
-  //.then(response => response.json())
- // .then(res => res())          // convert to plain text
-  .then(res =>{  // then log it out
+//options es un {prop(validate): valor(true/false) }
 
-  if(res.status === 200){
-    console.log(  `${res.status} ${res.statusText}`)
+const mdLinks = (path0, options)=>{
+  return new Promise((resolve, reject) => {
+  if(pathExistFun(path0)){
+    //console.log(`${path0}  exist`, 71)
+    if(fileIsMd(path0).length > 0 ){
+      //console.log(fileIsMd(path0), 73)
+      if(getLinks(path0).length > 0){
+          if (options == undefined || options.validate == false){
+          resolve ( getLinks(path0))
+          }else{
+            resolve( getStatus(path0))
+          }
+      }else{
+       return `${path0} does not have any links`
+      }
+    }else{
+      return `${path0} does not a file with md-extention`
+    }
   }else{
-    console.log("fail")
+    return `${path0} does not exist`
   }
 })
+};
+ /* mdLinks(pathTest, {validate: false})
+console.log(mdLinks(pathTest, {validate: false}),73) */
 
- /* fetch("https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce/1")
-  //.then(response => response.json())
- // .then(res => res())          // convert to plain text
-  .then(text => console.log(text))  // then log it out
-  .then(data => {
-    console.log(data)
-  })
-  .catch(err => console.log(err.message))
- // fetch('/users')
-  // .then(res => res.json()) // comment this out for now 
- */
+//mdLinks(pathTest, {validate: true})
+//console.log(mdLinks(pathTest, {validate: true}),76)
+
+// mdLinks(pathTest)
+//console.log(mdLinks(pathTest), 79)
+
+//mdLinks(pathTest, {validate: true}).then(data=>console.log(data, 82))
+
+/* mdLinks(pathTest)
+.then(data =>console.log(data))
+.catch(error => console.log(error))
+
+  */
+
+
+
+
+
+
+module.exports = {mdLinks, getStatus}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
-/* fetch("https://swapi.co/api/people/3")
-  .then(promesaFetch => promesaFetch.json())
-  .then(contenido => console.log(contenido)); */
 
-/*  const getStatus = (path) => {
-   getLinks(path).map((item)=>{
-    console.log(item.link,22);
- fetch(item.href)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
-  })
-  .catch(err => console.log(err.message))
-  })
-  //console.log(prueba,25);
-}
- 
-console.log(getStatus(pathTest))
-getStatus(pathTest)  */
 
-/* const mdLinks2 = (path0) => {
-    const promise = new Promise((resolve, reject) => {
-      if (pathExistFun(path0)){
-        return getLinks(fileIsMd(pathIsAbsolute(path0))) // == true
-      const links = getLinks(path0);
-      resolve(links);
-      }else{
-          reject (`ERROR:${path0} -DOES NOT EXIST`)
-      }
-         
-       
-       
-    });
-    return promise;
-}  */
- /*  console.log(mdLinks2(pathTest));
-  mdLinks2(pathTest); */
 
-  
- /* export default {
-   getStatus
- } */
+

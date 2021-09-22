@@ -1,5 +1,9 @@
 Este readme esta dentro del firstDirectory
- [Funciones (control de flujo)](https://curriculum.laboratoria.la/es/topics/javascript/02-flow-control/03-functions)
-  - [Funciones clásicas](https://curriculum.laboratoria.la/es/topics/javascript/03-functions/01-classic)
-  - [Arrow Functions](https://curriculum.laboratoria.la/es/topics/javascript/03-functions/02-arrow)
-  - [Funciones — bloques de código reutilizables - MDN](https://developer.mozilla.org/es/docs/Learn/JavaScript/Building_blocks/Functions)
+  - [Laboratoria Curriculum](https://curriculum.laboratoria.la)
+  - [Google](https://www.googlee.com/)
+  - [Youtube](https://www.youube.come)
+  - [Probando Error 404](https://http.cat/3050)
+  - [Funciones — bloques de código reutilizables - MDN](https://developer.mozilla.org)
+  - [Promise - MDN](https://developer.mozilla.org/es/docs/Web/JavaScript)
+  - [How to Write a JavaScript Promise - freecodecamp (en inglés)](https://www.freecodecamp.org)
+  - [Probando Error con 404](https://http.cat/4040)
